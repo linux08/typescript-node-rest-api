@@ -1,6 +1,6 @@
+"use strict";
 // import { Application } from 'express';
 // import morgan from 'morgan';
-
 // export class Logger {
 //   constructor(app) {
 //     // tslint:disable-next-line:max-line-length
