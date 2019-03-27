@@ -1,9 +1,7 @@
 import bodyParser from 'body-parser'; // used to parse the form data that you pass in the request
 import express from 'express';
 import morgan from 'morgan';
-import {
-  attachControllers,
-} from '@decorators/express';
+
 
 import { routes } from './routes';
 
@@ -24,7 +22,7 @@ class App {
         controllers.push(require("./controllers/" + file).default);
     });
 
-    attachControllers(this.app, controllers);
+
 
     // tslint:disable-next-line:no-unused-expression
     this.app.use(morgan('dev'));

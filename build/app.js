@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var body_parser_1 = __importDefault(require("body-parser")); // used to parse the form data that you pass in the request
 var express_1 = __importDefault(require("express"));
 var morgan_1 = __importDefault(require("morgan"));
-var express_2 = require("@decorators/express");
 var routes_1 = require("./routes");
 var App = /** @class */ (function () {
     function App() {
@@ -20,7 +19,6 @@ var App = /** @class */ (function () {
             if (file.indexOf('base') === -1)
                 controllers.push(require("./controllers/" + file).default);
         });
-        express_2.attachControllers(this.app, controllers);
         // tslint:disable-next-line:no-unused-expression
         this.app.use(morgan_1.default('dev'));
         this.app.use(body_parser_1.default.json()); // support application/json type post data
