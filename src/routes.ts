@@ -18,6 +18,14 @@ class Routes {
       this.userController.getUser(req, res),
     );
 
+    this.router.get(`/user/:id`, (req: express.Request, res: express.Response) =>
+      this.userController.getUserById(req, res),
+    );
+
+
+    this.router.post(`/user/:id`, (req: express.Request, res: express.Response) =>
+      this.userController.updateUserInfo(req, res),
+    );
   }
 }
 

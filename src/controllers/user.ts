@@ -14,10 +14,10 @@ export class UserController {
 
 
   async getUser(req: Request, res: Response) {
+    console.log('fkdjfjdjfjdj')
     try {
       const data = await this.connector.table('users')
         .select('*');
-      console.log('d -data');
       res.send(data);
     }
     catch (err) {
@@ -25,5 +25,28 @@ export class UserController {
     }
   }
 
+  async getUserById(req: Request, res: Response) {
+    const { id } = req.params;
+    try {
+      const data = await this.connector.table('users').whereIn('id', id);
+      res.send(data);
+    }
+    catch (err) {
+      res.status(500).send({ error: err.message });
+    }
+  }
+
+  async updateUserInfo(req: Request, res: Response) {
+    const { id } = req.params;
+    console.log('fkdfd', req.body);
+    try {
+      const data = await this.connector.table('users').whereIn('id', id).update(req.body).returning('*')
+      res.send(data)
+    }
+    catch (err) {
+
+      res.status(500).send({ error: err.message });
+    }
+  }
 
 }
