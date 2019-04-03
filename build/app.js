@@ -1,34 +1,71 @@
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var body_parser_1 = __importDefault(require("body-parser")); // used to parse the form data that you pass in the request
+var ts_express_decorators_1 = require("ts-express-decorators");
 var express_1 = __importDefault(require("express"));
-var morgan_1 = __importDefault(require("morgan"));
-var routes_1 = require("./routes");
-var App = /** @class */ (function () {
+var body_parser_1 = __importDefault(require("body-parser")); // used to parse the form data that you pass in the request
+var App = /** @class */ (function (_super) {
+    __extends(App, _super);
     function App() {
-        this.app = express_1.default();
-        this.config();
+        var _this = _super.call(this) || this;
+        _this.app = express_1.default();
+        return _this;
+        // this.config();
     }
-    App.prototype.config = function () {
-        var controllers = [];
-        var normalizedPath = require("path").join(__dirname, "controllers");
-        require("fs").readdirSync(normalizedPath).forEach(function (file) {
-            if (file.indexOf('base') === -1)
-                controllers.push(require("./controllers/" + file).default);
-        });
-        // tslint:disable-next-line:no-unused-expression
-        this.app.use(morgan_1.default('dev'));
-        this.app.use(body_parser_1.default.json()); // support application/json type post data
-        // support application/x-www-form-urlencoded post data
-        this.app.use(body_parser_1.default.urlencoded({
-            extended: false,
+    App.prototype.$onMountingMiddlewares = function () {
+        this.use(body_parser_1.default.json())
+            .use(body_parser_1.default.urlencoded({
+            extended: true
         }));
-        // Routing
-        this.app.use(routes_1.routes);
     };
+    App.prototype.startApp = function () {
+        this.start();
+    };
+    App.prototype.$onReady = function () {
+        console.log('Server started...');
+    };
+    App.prototype.$onServerInitError = function (err) {
+        console.error(err);
+    };
+    App = __decorate([
+        ts_express_decorators_1.ServerSettings({
+            acceptMimes: ["application/json"],
+            rootDir: "" + __dirname,
+            port: process.env.PORT || 3000,
+            mount: {
+                "/": "${rootDir}/controllers/**\/*.ts"
+            },
+            componentsScan: [
+                "${rootDir}/services/**/**.ts"
+            ],
+        }),
+        __metadata("design:paramtypes", [])
+    ], App);
     return App;
-}());
-exports.default = new App().app;
+}(ts_express_decorators_1.ServerLoader));
+exports.App = App;
+// export default new App().app;

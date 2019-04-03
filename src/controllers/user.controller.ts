@@ -1,20 +1,21 @@
+import { Controller, Get, Req, Put, Res } from "ts-express-decorators";
 import * as knex from 'knex';
 import { Request, Response } from 'express';
 import KnexConnection from '../knex';
+@Controller("/")
 export class UserController {
 
   private connector: knex;
   constructor() {
     this.connector = new KnexConnection()//.knex();
   }
-
+  @Get("/test")
   public test(req: Request, res: Response) {
     res.send('test')
   }
 
-
+  @Get("/users")
   async getUser(req: Request, res: Response) {
-    console.log('fkdjfjdjfjdj')
     try {
       const data = await this.connector.table('users')
         .select('*');
@@ -24,7 +25,7 @@ export class UserController {
       res.status(500).send({ error: err.message });
     }
   }
-
+  @Get("/users/:id")
   async getUserById(req: Request, res: Response) {
     const { id } = req.params;
     try {
@@ -35,10 +36,9 @@ export class UserController {
       res.status(500).send({ error: err.message });
     }
   }
-
+  @Put("/users/:id")
   async updateUserInfo(req: Request, res: Response) {
     const { id } = req.params;
-    console.log('fkdfd', req.body);
     try {
       const data = await this.connector.table('users').whereIn('id', id).update(req.body).returning('*')
       res.send(data)

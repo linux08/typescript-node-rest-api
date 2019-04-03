@@ -9,25 +9,20 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var path = __importStar(require("path"));
 var BASE_PATH = path.join(__dirname, 'src', 'server', 'db');
-module.exports = {
-    test: {
-        client: 'pg',
-        connection: 'postgres://postgres:david@localhost:5432/example',
-        migrations: {
-            directory: path.join(BASE_PATH, 'migrations'),
-        },
-        seeds: {
-            directory: path.join(BASE_PATH, 'seeds'),
-        },
+var KnexConnection = require('knex')({
+    client: 'pg',
+    version: '7.2',
+    connection: {
+        host: '127.0.0.1',
+        user: 'david',
+        password: 'david',
+        database: 'myapp_test'
     },
-    development: {
-        client: 'pg',
-        connection: 'postgres://postgres:david@localhost:5432/eexample',
-        migrations: {
-            directory: path.join(BASE_PATH, 'migrations'),
-        },
-        seeds: {
-            directory: path.join(BASE_PATH, 'seeds'),
-        },
+    migrations: {
+        directory: path.join(BASE_PATH, 'migrations'),
     },
-};
+    seeds: {
+        directory: path.join(BASE_PATH, 'seeds'),
+    },
+});
+exports.default = KnexConnection;

@@ -1,42 +1,49 @@
-import bodyParser from 'body-parser'; // used to parse the form data that you pass in the request
+
+import { ServerLoader, ServerSettings } from "ts-express-decorators";
 import express from 'express';
+import bodyParser from 'body-parser'; // used to parse the form data that you pass in the request
 import morgan from 'morgan';
 
 
-import { routes } from './routes';
+@ServerSettings({
+  acceptMimes: ["application/json"],
+  rootDir: `${__dirname}`,
+  port: process.env.PORT || 3000,
+  mount: {
+    "/": "${rootDir}/controllers/**\/*.ts"
+  },
+  componentsScan: [
+    "${rootDir}/services/**/**.ts"
+  ],
+})
 
-class App {
-  public app: express.Application;
+export class App extends ServerLoader {
 
   constructor() {
-    this.app = express();
-    this.config();
+    super();
   }
 
-  private config(): void {
-    const controllers: any[] = [];
-    const normalizedPath = require("path").join(__dirname, "controllers");
+  $onMountingMiddlewares(): void | Promise<any> {
+    this.use(bodyParser.json())
+      .use(bodyParser.urlencoded({
+        extended: true
+      }))
+      .use(morgan('dev'));
+  }
 
-    require("fs").readdirSync(normalizedPath).forEach(function (file: string) {
-      if (file.indexOf('base') === -1)
-        controllers.push(require("./controllers/" + file).default);
-    });
+  public startApp() {
+    this.start();
+  }
+  public $onReady() {
+    console.log('Server started...');
 
+  }
 
-
-    // tslint:disable-next-line:no-unused-expression
-    this.app.use(morgan('dev'));
-    this.app.use(bodyParser.json()); // support application/json type post data
-    // support application/x-www-form-urlencoded post data
-    this.app.use(bodyParser.urlencoded({
-      extended: false,
-    }));
-
-    // Routing
-    this.app.use(routes);
-
+  public $onServerInitError(err: {} | string) {
+    console.error(err);
   }
 
 }
 
-export default new App().app;
+module.exports = new App().startApp();
+// export default new App().app;
