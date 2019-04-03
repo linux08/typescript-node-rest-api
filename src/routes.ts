@@ -14,6 +14,10 @@ class Routes {
       this.userController.test(req, res),
     );
 
+    this.router.get('/user', (req: express.Request, res: express.Response) =>
+      this.userController.getUser(req, res),
+    );
+
   }
 }
 

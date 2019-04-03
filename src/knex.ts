@@ -1,28 +1,22 @@
-import { Config } from 'knex';
+import Knex, { Config } from 'knex';
 import * as path from 'path';
 const BASE_PATH = path.join(__dirname, 'src', 'server', 'db');
 
-module.exports = {
-
-  test: {
-    client: 'pg',
-    connection: 'postgres://postgres:david@localhost:5432/example',
-    migrations: {
-      directory: path.join(BASE_PATH, 'migrations'),
-    },
-    seeds: {
-      directory: path.join(BASE_PATH, 'seeds'),
-    },
+const KnexConnection = require('knex')({
+  client: 'pg',
+  version: '7.2',
+  connection: {
+    host: '127.0.0.1',
+    user: 'david',
+    password: 'david',
+    database: 'myapp_test'
   },
-  development: {
-    client: 'pg',
-    connection: 'postgres://postgres:david@localhost:5432/eexample',
-    migrations: {
-      directory: path.join(BASE_PATH, 'migrations'),
-    },
-    seeds: {
-      directory: path.join(BASE_PATH, 'seeds'),
-    },
+  migrations: {
+    directory: path.join(BASE_PATH, 'migrations'),
   },
+  seeds: {
+    directory: path.join(BASE_PATH, 'seeds'),
+  },
+});
 
-};
+export default KnexConnection;
