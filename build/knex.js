@@ -7,9 +7,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var path = __importStar(require("path"));
-var BASE_PATH = path.join(__dirname, 'src', 'server', 'db');
-var KnexConnection = require('knex')({
+const path = __importStar(require("path"));
+const BASE_PATH = path.join(__dirname, 'src', 'server', 'db');
+const KnexConnection = require('knex')({
     client: 'pg',
     version: '7.2',
     connection: {
