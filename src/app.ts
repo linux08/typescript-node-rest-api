@@ -12,9 +12,7 @@ import morgan from 'morgan';
   mount: {
     "/": "${rootDir}/controllers/**\/*.ts"
   },
-  componentsScan: [
-    "${rootDir}/services/**/**.ts"
-  ],
+
 })
 
 export class App extends ServerLoader {
@@ -46,4 +44,4 @@ export class App extends ServerLoader {
 }
 
 module.exports = new App().startApp();
-// export default new App().app;
+

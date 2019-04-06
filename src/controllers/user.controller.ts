@@ -1,4 +1,4 @@
-import { Controller, Get, Req, Post, Res } from "ts-express-decorators";
+import { Controller, Get, Req, Put, Res } from "ts-express-decorators";
 import * as knex from 'knex';
 import { Request, Response } from 'express';
 import KnexConnection from '../knex';
@@ -8,7 +8,7 @@ export class UserController extends API {
 
   private connector: knex;
   constructor() {
-    super()
+    super();
     this.connector = new KnexConnection()//.knex();
   }
   @Get("/test")
@@ -38,7 +38,7 @@ export class UserController extends API {
       res.status(500).send({ error: err.message });
     }
   }
-  @Post("/users/:id")
+  @Put("/users/:id")
   async updateUserInfo(req: Request, res: Response) {
     const { id } = req.params;
     try {
