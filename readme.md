@@ -1,4 +1,4 @@
-# Init challenge
+
 
 This is a simple CRUD project used to manage developer details
 
